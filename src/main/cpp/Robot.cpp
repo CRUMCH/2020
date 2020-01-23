@@ -10,16 +10,20 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <ctre/phoenix.h>
 #include <frc/WPILib.h>
+#include <frc/util/color.h>
+#include "rev/ColorSensorV3.h"
 
 WPI_VictorSPX BallShootFront {1};
 WPI_VictorSPX BallShootBack {2};
 
-WPI_TalonSRX Wheel1 {2};
+
+
+/*WPI_TalonSRX Wheel1 {2};
 WPI_TalonSRX Wheel2 {4};
 WPI_TalonSRX Wheel3 {3};
 WPI_TalonSRX Wheel4 {1};
 
-frc::MecanumDrive Mecanums {Wheel4 , Wheel3 , Wheel2 , Wheel1};
+frc::MecanumDrive Mecanums {Wheel4 , Wheel3 , Wheel2 , Wheel1};*/
 
 frc::Joystick Xbox {0};
 frc::Joystick Yoke {1};
@@ -74,7 +78,10 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() 
+{
+  RoboControl();
+}
 
 void Robot::TestPeriodic() {}
 
@@ -86,7 +93,7 @@ void Robot::RoboControl()
 
   #########################################################################################################################*/
  
-  double xboxLX = Xbox.GetRawAxis(0);
+ /* double xboxLX = Xbox.GetRawAxis(0);
   double xboxRX = Xbox.GetRawAxis(4);
 
   double xboxRY = Xbox.GetRawAxis(5);
@@ -106,17 +113,23 @@ void Robot::RoboControl()
     xboxLX = 0;
   }
   
-  Mecanums.DriveCartesian(xboxRX , xboxRY , xboxLX);
+  Mecanums.DriveCartesian(xboxRX , xboxRY , xboxLX);*/
   
   double speedwheel = (Yoke.GetRawAxis(2) * -1);
   speedwheel = ((speedwheel + 1.0) / 2.0);
 
-  if(Yoke.GetRawButtonPressed(1))
+  if(Yoke.GetRawButton(1))
   {
-    BallShootFront.Set(speedwheel);
-  
-    BallShootBack.Set(-speedwheel);
+    BallShootFront.Set(-speedwheel);
+    BallShootBack.Set(speedwheel);
+    std::cout << "Spout " << m_autoSelected << std::endl;
   }
+  else {
+    BallShootFront.Set(0);
+    BallShootBack.Set(0);
+    std::cout << "  oof " << m_autoSelected << std::endl;
+  }
+  
 }
 //HI
 #ifndef RUNNING_FRC_TESTS
